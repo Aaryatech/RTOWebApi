@@ -1,6 +1,7 @@
 package com.rtowebapi.controller;
 
 import java.text.DateFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
 import com.rtowebapi.model.Cust;
+import com.rtowebapi.model.LoginResCust;
+import com.rtowebapi.model.LoginResUser;
 import com.rtowebapi.model.Right;
 import com.rtowebapi.model.User;
 import com.rtowebapi.model.WorkType;
@@ -305,9 +308,9 @@ public class MasterApiController {
 		WorkType res = new WorkType();
 
 		try {
-			
+
 			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			Date now =new Date();
+			Date now = new Date();
 			res.setLastUpdateTime(sdf.format(now));
 
 			res = workTypeRepo.saveAndFlush(workType);
@@ -382,4 +385,63 @@ public class MasterApiController {
 		return info;
 
 	}
+
+	// -----------Customer Login--------------------
+
+	@RequestMapping(value = { "/loginResponseCust" }, method = RequestMethod.POST)
+	public @ResponseBody LoginResCust loginResponseCust(@RequestParam("custMobile") String custMobile,
+			@RequestParam("custPassword") String custPassword) {
+
+		LoginResCust loginResponse = new LoginResCust();
+		try {
+
+			Cust mu = custRepo.findByCustMobileAndCustPasswordAndIsUsed(custMobile, custPassword, 1);
+			if (mu == null) {
+				loginResponse.setError(true);
+				loginResponse.setMsg("login Failed");
+			} else {
+				loginResponse.setError(false);
+				loginResponse.setMsg("login successfully");
+				loginResponse.setCust(mu);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			loginResponse.setError(true);
+			loginResponse.setMsg("login Failed");
+		}
+
+		return loginResponse;
+	}
+
+	// -----------User Login--------------------
+
+	@RequestMapping(value = { "/loginResponseUser" }, method = RequestMethod.POST)
+	public @ResponseBody LoginResUser loginResponseUser(@RequestParam("userMobile") String userMobile,
+			@RequestParam("userPassword") String userPassword) {
+
+		LoginResUser loginResponse = new LoginResUser();
+		try {
+
+			User user = userRepo.findByUserMobileAndUserPasswordAndIsUsed(userMobile, userPassword, 1);
+			if (user == null) {
+				loginResponse.setError(true);
+				loginResponse.setMsg("login Failed");
+			} else {
+				loginResponse.setError(false);
+				loginResponse.setMsg("login successfully");
+				loginResponse.setUser(user);
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			loginResponse.setError(true);
+			loginResponse.setMsg("login Failed");
+		}
+
+		return loginResponse;
+	}
+
 }

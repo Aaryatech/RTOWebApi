@@ -25,4 +25,6 @@ public interface CustRepo extends JpaRepository<Cust, Integer> {
 
 	List<Cust> findByIsUsedOrderByCustIdDesc(int i);
 
+	Cust findByCustMobileAndCustPasswordAndIsUsed(String custMobile, String custPassword, int i);
+
 }
