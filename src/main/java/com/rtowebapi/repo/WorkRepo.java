@@ -17,4 +17,6 @@ public interface WorkRepo extends JpaRepository<Work, Integer> {
 	@Query("UPDATE Work SET isUsed=0  WHERE work_id=:workId")
 	int deleteWork(@Param("workId") int workId);
 
+	Work findByStatus(int status);
+
 }
