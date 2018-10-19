@@ -1,6 +1,7 @@
 package com.rtowebapi.controller;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
 import com.rtowebapi.model.GetWork;
+import com.rtowebapi.model.UpdateStatus;
 import com.rtowebapi.model.Work;
 import com.rtowebapi.model.WorkDetail;
 import com.rtowebapi.repo.GetWorkRepo;
+import com.rtowebapi.repo.UpdateStatusRepo;
 import com.rtowebapi.repo.WorkDetailRepo;
 import com.rtowebapi.repo.WorkRepo;
 
@@ -30,6 +33,9 @@ public class TxApiController {
 
 	@Autowired
 	GetWorkRepo getWorkRepo;
+
+	@Autowired
+	UpdateStatusRepo updateStatusRepo;
 
 	@RequestMapping(value = { "/saveOrderHeaderDetail" }, method = RequestMethod.POST)
 	public @ResponseBody Info saveOrderHeaderDetail(@RequestBody Work work) {
@@ -180,6 +186,69 @@ public class TxApiController {
 
 		}
 		return info;
+
+	}
+
+	@RequestMapping(value = { "/updateWorkHeaderStatusAndCost" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateWorkHeaderStatusAndCost(@RequestBody List<UpdateStatus> updateList) {
+
+		Info errorMessage = new Info();
+
+		System.out.println("updateList" + updateList.toString());
+		int res;
+
+		try {
+			for (int i = 0; i < updateList.size(); i++) {
+				System.out.println("size" + updateList.size());
+
+				UpdateStatus u = updateList.get(i);
+
+				res = updateStatusRepo.updateWorkHeaderStatusAndCost(u.getStatus(), u.getWorkId(), u.getWorkCost());
+
+				if (res > 0) {
+
+					errorMessage.setError(false);
+					errorMessage.setMessage("success Update Order Header");
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("exc in update order " + e.getMessage());
+			e.printStackTrace();
+			errorMessage.setError(true);
+
+		}
+
+		return errorMessage;
+	}
+
+	@RequestMapping(value = { "/getWorkHeaderByWorkId" }, method = RequestMethod.POST)
+	public @ResponseBody GetWork getWorkHeaderByWorkId(@RequestParam("workId") int workId) {
+
+	GetWork workHeader = new GetWork();
+
+		try {
+
+			workHeader = getWorkRepo.getWorkByWorkId(workId);
+		
+				workHeader.setDate1(DateConvertor.convertToDMY(workHeader.getDate1()));
+
+				workHeader.setDate2(DateConvertor.convertToDMY(workHeader.getDate2()));
+
+				List<WorkDetail> workDetailList = workDetailRepo.findByWorkId(workId);
+				workHeader.setWorkDetailList(workDetailList);
+
+			
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return workHeader;
 
 	}
 
