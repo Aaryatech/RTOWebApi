@@ -2,6 +2,7 @@ package com.rtowebapi.controller;
 
 import java.util.ArrayList;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
 import com.rtowebapi.model.GetWork;
+import com.rtowebapi.model.TaskDesc;
 import com.rtowebapi.model.UpdateStatus;
 import com.rtowebapi.model.Work;
 import com.rtowebapi.model.WorkDetail;
 import com.rtowebapi.repo.GetWorkRepo;
+import com.rtowebapi.repo.TaskDescRepo;
 import com.rtowebapi.repo.UpdateStatusRepo;
 import com.rtowebapi.repo.WorkDetailRepo;
 import com.rtowebapi.repo.WorkRepo;
@@ -36,6 +39,26 @@ public class TxApiController {
 
 	@Autowired
 	UpdateStatusRepo updateStatusRepo;
+
+	@Autowired
+	TaskDescRepo taskDescRepo;
+
+	@RequestMapping(value = { "/getTaskByInnerTaskId" }, method = RequestMethod.POST)
+	public @ResponseBody TaskDesc getTaskByInnerTaskId(@RequestParam("innerTaskId") int innerTaskId) {
+
+		TaskDesc right = new TaskDesc();
+
+		try {
+			right = taskDescRepo.findByInnerTaskId(innerTaskId);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return right;
+
+	}
 
 	@RequestMapping(value = { "/saveOrderHeaderDetail" }, method = RequestMethod.POST)
 	public @ResponseBody Info saveOrderHeaderDetail(@RequestBody Work work) {
@@ -228,20 +251,21 @@ public class TxApiController {
 	@RequestMapping(value = { "/getWorkHeaderByWorkId" }, method = RequestMethod.POST)
 	public @ResponseBody GetWork getWorkHeaderByWorkId(@RequestParam("workId") int workId) {
 
-	GetWork workHeader = new GetWork();
+		GetWork workHeader = new GetWork();
 
 		try {
 
 			workHeader = getWorkRepo.getWorkByWorkId(workId);
-		
-				workHeader.setDate1(DateConvertor.convertToDMY(workHeader.getDate1()));
 
-				workHeader.setDate2(DateConvertor.convertToDMY(workHeader.getDate2()));
+			workHeader.setDate1(DateConvertor.convertToDMY(workHeader.getDate1()));
 
-				List<WorkDetail> workDetailList = workDetailRepo.findByWorkId(workId);
-				workHeader.setWorkDetailList(workDetailList);
+			workHeader.setDate2(DateConvertor.convertToDMY(workHeader.getDate2()));
 
-			
+			List<WorkDetail> workDetailList = workDetailRepo.findByWorkId(workId);
+			for (int i = 0; i < workDetailList.size(); i++) {
+				workDetailList.get(i).setDate(DateConvertor.convertToDMY(workDetailList.get(i).getDate()));
+			}
+			workHeader.setWorkDetailList(workDetailList);
 
 		} catch (Exception e) {
 
