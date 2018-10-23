@@ -1,7 +1,8 @@
 package com.rtowebapi.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,6 +277,36 @@ public class TxApiController {
 		return errorMessage;
 	}
 
+	@RequestMapping(value = { "/updateWorkStatusAndUserId" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateWorkStatusAndUserId(@RequestParam("workIdList") List<Integer> workIdList,
+			@RequestParam("status") int status, @RequestParam("userId") String userId) {
+
+		Info errorMessage = new Info();
+
+		int res;
+
+		try {
+
+			res = workRepo.updateWorkUsrId(status, workIdList, userId);
+
+			if (res > 0) {
+
+				errorMessage.setError(false);
+				errorMessage.setMessage("success Update Status");
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("exc in update order " + e.getMessage());
+			e.printStackTrace();
+			errorMessage.setError(true);
+
+		}
+
+		return errorMessage;
+	}
+
 	@RequestMapping(value = { "/getWorkHeaderByWorkId" }, method = RequestMethod.POST)
 	public @ResponseBody GetWork getWorkHeaderByWorkId(@RequestParam("workId") int workId) {
 
@@ -286,8 +317,6 @@ public class TxApiController {
 			workHeader = getWorkRepo.getWorkByWorkId(workId);
 
 			workHeader.setDate1(DateConvertor.convertToDMY(workHeader.getDate1()));
-
-			workHeader.setDate2(DateConvertor.convertToDMY(workHeader.getDate2()));
 
 			List<WorkDetail> workDetailList = workDetailRepo.findByWorkId(workId);
 			for (int i = 0; i < workDetailList.size(); i++) {
@@ -308,9 +337,15 @@ public class TxApiController {
 	public @ResponseBody Info updateWorkPayment(@RequestBody List<UpdateStatus> updateList) {
 
 		Info errorMessage = new Info();
+		Date now = new Date();
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String date = sdf1.format(now.getTime());
+		String dateTime = sdf.format(now.getTime());
 
 		System.out.println("updateList" + updateList.toString());
 		int res;
+		WorkDetail workRes = new WorkDetail();
 
 		try {
 			for (int i = 0; i < updateList.size(); i++) {
@@ -324,6 +359,20 @@ public class TxApiController {
 
 					errorMessage.setError(false);
 					errorMessage.setMessage("success Update Order Header");
+
+					WorkDetail w = new WorkDetail();
+					w.setDate(date);
+					w.setExInt1(u.getExInt1());
+					w.setExInt2(u.getExInt2());
+					w.setIsUsed(1);
+					w.setInnerTaskId(u.getStatus());
+					w.setDateTime(dateTime);
+					w.setWorkId(u.getWorkId());
+					w.setWorkDesc("User Allocation");
+
+					workRes = workDetailRepo.saveAndFlush(w);
+
+					System.out.println("workRes" + workRes.toString());
 
 				}
 

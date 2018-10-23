@@ -26,4 +26,10 @@ public interface WorkRepo extends JpaRepository<Work, Integer> {
 	@Query("UPDATE Work SET status=:status WHERE workId IN(:workId)")
 	int updateWorkStatus(@Param("status") int status, @Param("workId") List<Integer> workId);
 
+	@Transactional
+	@Modifying
+	@Query("UPDATE Work SET status=:status,exStr1=:userId WHERE workId IN(:workId)")
+	int updateWorkUsrId(@Param("status") int status, @Param("workId") List<Integer> workId,
+			@Param("userId") String userId);
+
 }
