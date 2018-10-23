@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
+import com.rtowebapi.model.Cust;
 import com.rtowebapi.model.GetWork;
 import com.rtowebapi.model.TaskDesc;
 import com.rtowebapi.model.UpdateStatus;
@@ -57,6 +58,24 @@ public class TxApiController {
 
 		}
 		return right;
+
+	}
+
+	@RequestMapping(value = { "/getAllTaskList" }, method = RequestMethod.GET)
+	public @ResponseBody List<TaskDesc> getAllTaskList() {
+
+		List<TaskDesc> taskList = new ArrayList<TaskDesc>();
+
+		try {
+
+			taskList = taskDescRepo.findAll();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return taskList;
 
 	}
 
