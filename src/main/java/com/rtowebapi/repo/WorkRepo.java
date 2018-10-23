@@ -1,6 +1,6 @@
 package com.rtowebapi.repo;
 
-
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,6 +21,9 @@ public interface WorkRepo extends JpaRepository<Work, Integer> {
 
 	Work findByStatus(int status);
 
-	
+	@Transactional
+	@Modifying
+	@Query("UPDATE Work SET status=:status WHERE workId IN(:workId)")
+	int updateWorkStatus(@Param("status") int status, @Param("workId") List<Integer> workId);
 
 }

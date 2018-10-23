@@ -12,9 +12,11 @@ public class UpdateStatus {
 	private int workId;
 
 	private float workCost;
-	
+
 	private int status;
 
+	private int exInt1;
+	private int exInt2;
 
 	public int getWorkId() {
 		return workId;
@@ -31,7 +33,6 @@ public class UpdateStatus {
 	public void setWorkCost(float workCost) {
 		this.workCost = workCost;
 	}
-	
 
 	public int getStatus() {
 		return status;
@@ -41,9 +42,26 @@ public class UpdateStatus {
 		this.status = status;
 	}
 
+	public int getExInt1() {
+		return exInt1;
+	}
+
+	public void setExInt1(int exInt1) {
+		this.exInt1 = exInt1;
+	}
+
+	public int getExInt2() {
+		return exInt2;
+	}
+
+	public void setExInt2(int exInt2) {
+		this.exInt2 = exInt2;
+	}
+
 	@Override
 	public String toString() {
-		return "UpdateStatus [workId=" + workId + ", workCost=" + workCost + ", status=" + status + "]";
+		return "UpdateStatus [workId=" + workId + ", workCost=" + workCost + ", status=" + status + ", exInt1=" + exInt1
+				+ ", exInt2=" + exInt2 + "]";
 	}
 
 }

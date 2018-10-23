@@ -2,7 +2,6 @@ package com.rtowebapi.controller;
 
 import java.util.ArrayList;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,7 +145,6 @@ public class TxApiController {
 			for (int i = 0; i < workHeader.size(); i++) {
 				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
 
-				workHeader.get(i).setDate2(DateConvertor.convertToDMY(workHeader.get(i).getDate2()));
 			}
 
 		} catch (Exception e) {
@@ -248,6 +246,36 @@ public class TxApiController {
 		return errorMessage;
 	}
 
+	@RequestMapping(value = { "/updateWorkStatus" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateWorkStatus(@RequestParam("workIdList") List<Integer> workIdList,
+			@RequestParam("status") int status) {
+
+		Info errorMessage = new Info();
+
+		int res;
+
+		try {
+
+			res = workRepo.updateWorkStatus(status, workIdList);
+
+			if (res > 0) {
+
+				errorMessage.setError(false);
+				errorMessage.setMessage("success Update Status");
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("exc in update order " + e.getMessage());
+			e.printStackTrace();
+			errorMessage.setError(true);
+
+		}
+
+		return errorMessage;
+	}
+
 	@RequestMapping(value = { "/getWorkHeaderByWorkId" }, method = RequestMethod.POST)
 	public @ResponseBody GetWork getWorkHeaderByWorkId(@RequestParam("workId") int workId) {
 
@@ -274,6 +302,42 @@ public class TxApiController {
 		}
 		return workHeader;
 
+	}
+
+	@RequestMapping(value = { "/updateWorkPayment" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateWorkPayment(@RequestBody List<UpdateStatus> updateList) {
+
+		Info errorMessage = new Info();
+
+		System.out.println("updateList" + updateList.toString());
+		int res;
+
+		try {
+			for (int i = 0; i < updateList.size(); i++) {
+				System.out.println("size" + updateList.size());
+
+				UpdateStatus u = updateList.get(i);
+
+				res = updateStatusRepo.updateWorkPayment(u.getStatus(), u.getWorkId(), u.getExInt1(), u.getExInt2());
+
+				if (res > 0) {
+
+					errorMessage.setError(false);
+					errorMessage.setMessage("success Update Order Header");
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("exc in update order " + e.getMessage());
+			e.printStackTrace();
+			errorMessage.setError(true);
+
+		}
+
+		return errorMessage;
 	}
 
 }
