@@ -1,6 +1,5 @@
 package com.rtowebapi.model;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +11,7 @@ public class GetWorkHeader {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int workId;
 
-	private int workTypeTd;
+	private int workTypeId;
 
 	private int custId;
 
@@ -33,14 +32,6 @@ public class GetWorkHeader {
 
 	public void setWorkId(int workId) {
 		this.workId = workId;
-	}
-
-	public int getWorkTypeTd() {
-		return workTypeTd;
-	}
-
-	public void setWorkTypeTd(int workTypeTd) {
-		this.workTypeTd = workTypeTd;
 	}
 
 	public int getCustId() {
@@ -107,9 +98,17 @@ public class GetWorkHeader {
 		this.date1 = date1;
 	}
 
+	public int getWorkTypeId() {
+		return workTypeId;
+	}
+
+	public void setWorkTypeId(int workTypeId) {
+		this.workTypeId = workTypeId;
+	}
+
 	@Override
 	public String toString() {
-		return "GetWorkHeader [workId=" + workId + ", workTypeTd=" + workTypeTd + ", custId=" + custId + ", vehicalNo="
+		return "GetWorkHeader [workId=" + workId + ", workTypeId=" + workTypeId + ", custId=" + custId + ", vehicalNo="
 				+ vehicalNo + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", custMobile=" + custMobile + ", custName="
 				+ custName + ", workTypeName=" + workTypeName + ", date1=" + date1 + "]";
 	}

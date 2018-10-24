@@ -30,17 +30,17 @@ public class ReportApiController {
 	@RequestMapping(value = { "/getWorkReportBetweenDate" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWork> getWorkReportBetweenDate(@RequestParam("fromDate") String fromDate,
 			@RequestParam("toDate") String toDate, @RequestParam("status") int status,
-			@RequestParam("workTypeTd") int workTypeTd) {
+			@RequestParam("workTypeId") int workTypeId) {
 
 		List<GetWork> workHeader = new ArrayList<>();
 
 		try {
 
-			if (workTypeTd == 0 && status != 0) {
+			if (workTypeId == 0 && status != 0) {
 				workHeader = getWorkRepo.getWorkBetDateAndStatus(fromDate, toDate, status);
 
-			} else if (status == 0 && workTypeTd != 0) {
-				workHeader = getWorkRepo.getWorkBetDateAndWorkTypeId(fromDate, toDate, workTypeTd);
+			} else if (status == 0 && workTypeId != 0) {
+				workHeader = getWorkRepo.getWorkBetDateAndWorkTypeId(fromDate, toDate, workTypeId);
 
 			} else {
 
@@ -63,14 +63,14 @@ public class ReportApiController {
 
 	@RequestMapping(value = { "/getWorkTypeReportBetDate" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWork> getWorkTypeReportBetDate(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate, @RequestParam("workTypeTd") int workTypeTd) {
+			@RequestParam("toDate") String toDate, @RequestParam("workTypeId") int workTypeId) {
 
 		List<GetWork> workHeader = new ArrayList<>();
 
 		try {
 
-			if (workTypeTd != 0) {
-				workHeader = getWorkRepo.getWorkBetDateAndWorkTypeId(fromDate, toDate, workTypeTd);
+			if (workTypeId != 0) {
+				workHeader = getWorkRepo.getWorkBetDateAndWorkTypeId(fromDate, toDate, workTypeId);
 
 			} else {
 

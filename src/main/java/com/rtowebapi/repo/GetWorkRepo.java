@@ -28,9 +28,8 @@ public interface GetWorkRepo extends JpaRepository<GetWork, Integer> {
 			@Param("status") int status);
 
 	@Query(value = "SELECT w.*,c.cust_name,c.cust_mobile ,t.work_type_name FROM t_work w ,m_cust c,m_work_type t WHERE "
-			+ " w.is_used=1 AND w.cust_id=c.cust_id AND t.work_type_id=w.work_type_id AND w.date1 BETWEEN :fromDate AND :toDate AND w.Work_type_id=:WorkTypeId", nativeQuery = true)
+			+ " w.is_used=1 AND w.cust_id=c.cust_id AND t.work_type_id=w.work_type_id AND w.date1 BETWEEN :fromDate AND :toDate AND w.Work_type_id=:workTypeId", nativeQuery = true)
 	List<GetWork> getWorkBetDateAndWorkTypeId(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
-			@Param("WorkTypeId") int WorkTypeId);
-
+			@Param("workTypeId") int workTypeId);
 
 }
