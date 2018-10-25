@@ -234,9 +234,15 @@ public class TxApiController {
 	public @ResponseBody Info updateWorkHeaderStatusAndCost(@RequestBody List<UpdateStatus> updateList) {
 
 		Info errorMessage = new Info();
+		Date now = new Date();
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String date = sdf1.format(now.getTime());
+		String dateTime = sdf.format(now.getTime());
+		int res;
+		WorkDetail workRes = new WorkDetail();
 
 		System.out.println("updateList" + updateList.toString());
-		int res;
 
 		try {
 			for (int i = 0; i < updateList.size(); i++) {
@@ -250,6 +256,18 @@ public class TxApiController {
 
 					errorMessage.setError(false);
 					errorMessage.setMessage("success Update Order Header");
+
+					WorkDetail w = new WorkDetail();
+					w.setDate(date);
+					w.setExInt1(u.getExInt1());
+					w.setExInt2(u.getExInt2());
+					w.setIsUsed(1);
+					w.setInnerTaskId(u.getStatus());
+					w.setDateTime(dateTime);
+					w.setWorkId(u.getWorkId());
+					w.setWorkDesc("Update Payment");
+
+					workRes = workDetailRepo.saveAndFlush(w);
 
 				}
 
@@ -301,9 +319,13 @@ public class TxApiController {
 			@RequestParam("status") int status, @RequestParam("userId") String userId) {
 
 		Info errorMessage = new Info();
-
+		Date now = new Date();
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String date = sdf1.format(now.getTime());
+		String dateTime = sdf.format(now.getTime());
 		int res;
-
+		WorkDetail workRes = new WorkDetail();
 		try {
 
 			res = workRepo.updateWorkUsrId(status, workIdList, userId);
@@ -312,6 +334,17 @@ public class TxApiController {
 
 				errorMessage.setError(false);
 				errorMessage.setMessage("success Update Status");
+
+				WorkDetail w = new WorkDetail();
+				w.setDate(date);
+
+				w.setIsUsed(1);
+				w.setInnerTaskId(status);
+				w.setDateTime(dateTime);
+
+				w.setWorkDesc("User Allocation");
+
+				workRes = workDetailRepo.saveAndFlush(w);
 
 			}
 
