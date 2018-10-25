@@ -444,4 +444,62 @@ public class MasterApiController {
 		return loginResponse;
 	}
 
+	@RequestMapping(value = { "/getUserByMobileNo" }, method = RequestMethod.POST)
+	public @ResponseBody Info getUserByMobileNo(@RequestParam("userMobile") String userMobile) {
+
+		Info info = new Info();
+
+		User user = new User();
+
+		try {
+			user = userRepo.findByUserMobileAndIsUsed(userMobile, 1);
+
+			if (user == null) {
+				info.setError(false);
+				info.setMessage("New user");
+			} else {
+				info.setError(true);
+				info.setMessage(" Mobile No Already Exist");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage(" Exception ");
+
+		}
+		return info;
+
+	}
+
+	@RequestMapping(value = { "/getCustomerByMobileNo" }, method = RequestMethod.POST)
+	public @ResponseBody Info getCustomerByMobileNo(@RequestParam("custMobile") String custMobile) {
+
+		Info info = new Info();
+
+		Cust cust = new Cust();
+
+		try {
+			cust = custRepo.findByCustMobileAndIsUsed(custMobile, 1);
+
+			if (cust == null) {
+				info.setError(false);
+				info.setMessage("New Customer");
+			} else {
+				info.setError(true);
+				info.setMessage(" Mobile No Already Exist");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage(" Exception ");
+
+		}
+		return info;
+
+	}
+
 }

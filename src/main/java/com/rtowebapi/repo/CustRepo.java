@@ -27,4 +27,6 @@ public interface CustRepo extends JpaRepository<Cust, Integer> {
 
 	Cust findByCustMobileAndCustPasswordAndIsUsed(String custMobile, String custPassword, int i);
 
+	Cust findByCustMobileAndIsUsed(String custMobile, int i);
+
 }
