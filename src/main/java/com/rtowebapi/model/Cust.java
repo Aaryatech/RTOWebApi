@@ -37,8 +37,8 @@ public class Cust {
 	@Column(name = "is_used")
 	private int isUsed;
 
-	@Column(name = "ex_str1")
-	private String exStr1;
+	@Column(name = "ex_str1")//used for cust device token 
+	private String exStr1; //used for cust device token 
 
 	@Column(name = "ex_str2")
 	private String exStr2;

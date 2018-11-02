@@ -129,6 +129,70 @@ public class MasterApiController {
 
 	}
 
+	// Sachin update Cust token 2 Nov
+	@RequestMapping(value = { "/updateToken" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateToken(@RequestParam("custId") int custId, @RequestParam("token") String token) {
+
+		Info info = new Info();
+
+		try {
+			int res = custRepo.updateToken(custId, token);
+
+			if (res == 1) {
+				info.setError(false);
+				info.setMessage("Successfully Updated Token");
+			} else {
+				info.setError(true);
+				info.setMessage(" Error Failed to Update Token");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage("Exce Failed to Update Token ");
+
+		}
+		return info;
+
+	}
+
+	// Sachin change Cust password 2 Nov
+	@RequestMapping(value = { "/changeCustPass" }, method = RequestMethod.POST)
+	public @ResponseBody Info changeCustPass(@RequestParam("custId") int custId,
+			@RequestParam("oldPass") String oldPass, @RequestParam("newPass") String newPass) {
+
+		Info info = new Info();
+
+		try {
+
+			int res = 0;
+
+			Cust getCust = custRepo.findByCustId(custId);
+
+			if (getCust.getCustPassword().equals(oldPass)) {
+				System.err.println("Old password matched ");
+				res = custRepo.changePass(custId, newPass);
+			} else {
+				info.setError(true);
+				info.setMessage("Old Password Not Matched");
+			}
+			if (res == 1) {
+				info.setError(false);
+				info.setMessage("Successfully Updated Password");
+			}
+
+		} catch (Exception e) {
+			System.err.println("Exce in changeCustPass   " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage("Exce Failed to Update Password ");
+
+		}
+		return info;
+
+	}
+
 	// ----------------------------------------Right----------------------------------------------------
 
 	@RequestMapping(value = { "/saveRight" }, method = RequestMethod.POST)
