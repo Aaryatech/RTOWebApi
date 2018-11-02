@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rtowebapi.model.Cust;
-
+ 
 public interface CustRepo extends JpaRepository<Cust, Integer> {
 
 	Cust findByCustId(int custId);
