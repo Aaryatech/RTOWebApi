@@ -31,5 +31,18 @@ public interface GetWorkRepo extends JpaRepository<GetWork, Integer> {
 			+ " w.is_used=1 AND w.cust_id=c.cust_id AND t.work_type_id=w.work_type_id AND w.date1 BETWEEN :fromDate AND :toDate AND w.Work_type_id=:workTypeId", nativeQuery = true)
 	List<GetWork> getWorkBetDateAndWorkTypeId(@Param("fromDate") String fromDate, @Param("toDate") String toDate,
 			@Param("workTypeId") int workTypeId);
-
+	
+	/*
+	SELECT t_work.* , m_cust.cust_name,m_cust.cust_mobile,m_work_type.work_type_name 
+	FROM t_work,m_cust,m_work_type
+	WHERE t_work.cust_id=: custId AND t_work.work_type_id=m_work_type.work_type_id AND
+	t_work.cust_id=m_cust.cust_id
+	*/
+	
+	@Query(value = "SELECT t_work.* , m_cust.cust_name,m_cust.cust_mobile,m_work_type.work_type_name \n" + 
+			"	FROM t_work,m_cust,m_work_type\n" + 
+			"	WHERE t_work.cust_id=:custId AND t_work.work_type_id=m_work_type.work_type_id AND\n" + 
+			"	t_work.cust_id=m_cust.cust_id\n" + 
+			"	", nativeQuery = true)
+	List<GetWork> getWorkByCustId(@Param("custId") int custId);
 }

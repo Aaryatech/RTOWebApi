@@ -176,6 +176,33 @@ public class TxApiController {
 
 	}
 
+	@RequestMapping(value = { "/getCustWorkHeader" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetWork> getCustWorkHeader(@RequestParam("custId") int custId) {
+
+		List<GetWork> workHeader = new ArrayList<>();
+
+		try {
+
+			workHeader = getWorkRepo.getWorkByCustId(custId);
+			for (int i = 0; i < workHeader.size(); i++) {
+				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
+
+			}
+
+		} catch (Exception e) {
+			
+			System.err.println("Exce in getCustWorkHeader " +e.getMessage());
+
+			e.printStackTrace();
+
+		}
+		
+		return workHeader;
+
+	}
+
+	
+	
 	@RequestMapping(value = { "/deleteWork" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteWork(@RequestParam("workId") int workId) {
 
