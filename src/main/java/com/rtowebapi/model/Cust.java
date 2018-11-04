@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "m_cust")
@@ -60,6 +61,19 @@ public class Cust {
 
 	@Column(name = "sut_time")
 	private String sutTime;
+
+	
+	@Transient
+	private String resp;
+	
+	
+	public String getResp() {
+		return resp;
+	}
+
+	public void setResp(String resp) {
+		this.resp = resp;
+	}
 
 	public int getCustId() {
 		return custId;
@@ -195,7 +209,7 @@ public class Cust {
 				+ custPassword + ", custDob=" + custDob + ", custEmail=" + custEmail + ", lastUpdateTime="
 				+ lastUpdateTime + ", isUsed=" + isUsed + ", exStr1=" + exStr1 + ", exStr2=" + exStr2 + ", exInt1="
 				+ exInt1 + ", exInt2=" + exInt2 + ", date1=" + date1 + ", date2=" + date2 + ", addPincode=" + addPincode
-				+ ", sutTime=" + sutTime + "]";
+				+ ", sutTime=" + sutTime + ", resp=" + resp + "]";
 	}
 
 }

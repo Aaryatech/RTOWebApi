@@ -41,5 +41,10 @@ public interface CustRepo extends JpaRepository<Cust, Integer> {
 	@Modifying
 	@Query("UPDATE Cust SET custPassword=:newPass  WHERE custId=:custId")
 	int changePass(@Param("custId") int custId, @Param("newPass") String newPass);
+	
+	@Transactional
+	@Modifying
+	@Query("UPDATE Cust SET custPassword=:newPass  WHERE custMobile=:custMobile")
+	int changePassByMobNo(@Param("custMobile") String custMobile, @Param("newPass") String newPass);
 
 }

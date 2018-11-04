@@ -50,11 +50,29 @@ public class MasterApiController {
 		Cust res = new Cust();
 
 		try {
+			
+			Cust custCheck = custRepo.findByCustMobileAndIsUsed(cust.getCustMobile(), 1);
 
-			res = custRepo.saveAndFlush(cust);
+			if (custCheck == null) {
+
+				res = custRepo.saveAndFlush(cust);
+				res.setResp("saved");
+			} else {
+			
+					res.setResp("already exist");
+					System.err.println("res" + res);
+					System.err.println("already exist " + cust.getCustMobile());
+				
+			}
+			if (res.getCustId() < 1 && custCheck == null) {
+				
+				System.err.println("res.getCustId() < 1 && custCheck == null");
+				res.setResp("failed to save");
+			}
 
 		} catch (Exception e) {
-
+			System.err.println("Cust Bean " +res.toString());
+			res.setResp("failed to save");
 			e.printStackTrace();
 
 		}
@@ -184,6 +202,30 @@ public class MasterApiController {
 
 		} catch (Exception e) {
 			System.err.println("Exce in changeCustPass   " + e.getMessage());
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage("Exce Failed to Update Password ");
+
+		}
+		return info;
+
+	}
+
+	// Sachin change Cust password 3 Nov
+	@RequestMapping(value = { "/changeCustPassByMobNo" }, method = RequestMethod.POST)
+	public @ResponseBody Info changeCustPassByMobNo(@RequestParam("custMobile") String custMobile,
+			@RequestParam("newPass") String newPass) {
+
+		Info info = new Info();
+
+		try {
+
+			int res = 0;
+
+			res = custRepo.changePassByMobNo(custMobile, newPass);
+
+		} catch (Exception e) {
+			System.err.println("Exce in changeCustPassByMobNo   " + e.getMessage());
 			e.printStackTrace();
 			info.setError(true);
 			info.setMessage("Exce Failed to Update Password ");
