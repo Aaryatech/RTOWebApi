@@ -22,8 +22,8 @@ public class ImageUploadController {
 
 	//private static String DOC_URL = "/opt/tomcat-latest/webapps/uploads/SUGGESTION/";
 	
-	private static String DOC_URL="/home/lenovo/Documents/RtoUpload/";
-	
+	//private static String DOC_URL="/home/lenovo/Documents/RtoUpload/";
+	private static String DOC_URL=	"/home/aaryate1/tomcat.aaryatechindia.in/tomcat-8.0.18/webapps/rtodocupload/";
 	
 	//private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 	
@@ -81,7 +81,10 @@ System.err.println(" no  of files to push " +uploadfile.length);
 				
 	            if(type.equalsIgnoreCase("1"))
 	            {
-				 path =Paths.get(DOC_URL + imageName.get(i));
+	            	
+	            String name=imageName.get(i).substring(1, imageName.get(i).length()-1);
+	            
+				 path =Paths.get(DOC_URL + name);
 	            }
 
 	            
