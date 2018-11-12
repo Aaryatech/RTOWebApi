@@ -28,5 +28,11 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 	User findByUserMobileAndUserPasswordAndIsUsed(String userMobile, String userPassword, int i);
 
 	User findByUserMobileAndIsUsed(String userMobile, int i);
+	
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE User SET exStr1=:token WHERE user_id=:userId")
+	int updateUsrToken(@Param("userId") int userId,@Param("token") String token);
 
 }

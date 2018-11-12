@@ -45,4 +45,7 @@ public interface GetWorkRepo extends JpaRepository<GetWork, Integer> {
 			"	t_work.cust_id=m_cust.cust_id\n" + 
 			"	", nativeQuery = true)
 	List<GetWork> getWorkByCustId(@Param("custId") int custId);
+	
+	
+	
 }

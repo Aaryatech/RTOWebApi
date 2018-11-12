@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
 import com.rtowebapi.model.Cust;
+import com.rtowebapi.model.GetCustWork;
 import com.rtowebapi.model.GetWork;
 import com.rtowebapi.model.TaskDesc;
 import com.rtowebapi.model.UpdateStatus;
 import com.rtowebapi.model.Work;
 import com.rtowebapi.model.WorkDetail;
+import com.rtowebapi.repo.GetCustWorkRepo;
 import com.rtowebapi.repo.GetWorkRepo;
 import com.rtowebapi.repo.TaskDescRepo;
 import com.rtowebapi.repo.UpdateStatusRepo;
@@ -200,7 +202,57 @@ public class TxApiController {
 		return workHeader;
 
 	}
+	
+	//Sachin 12 Nov for RTO android Anmol
+	
+	@Autowired
+	GetCustWorkRepo getCustWorkRepo;
 
+
+	@RequestMapping(value = { "/getCustWorkByUserId" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetCustWork> getCustWorkByCustId(@RequestParam("status") int status,@RequestParam("userId") int userId) {
+
+		List<GetCustWork> workHeader = new ArrayList<>();
+
+		try {
+
+			workHeader = getCustWorkRepo.getCustWorkByUserIdAndStatus(userId, status);
+			for (int i = 0; i < workHeader.size(); i++) {
+				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return workHeader;
+
+	}
+	
+	@RequestMapping(value = { "/getCustWorkByUserIdAndDate" }, method = RequestMethod.POST)
+	public @ResponseBody List<GetCustWork> getCustWorkByUserIdAndDate(@RequestParam("fromDate") String fromDate,
+			@RequestParam("toDate") String toDate,@RequestParam("userId") int userId) {
+
+		List<GetCustWork> workHeader = new ArrayList<>();
+
+		try {
+
+			workHeader = getCustWorkRepo.getCustWorkByUserIdAndDate(userId, fromDate, toDate);
+			for (int i = 0; i < workHeader.size(); i++) {
+				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return workHeader;
+
+	}
 	
 	
 	@RequestMapping(value = { "/deleteWork" }, method = RequestMethod.POST)

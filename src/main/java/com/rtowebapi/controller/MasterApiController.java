@@ -405,7 +405,35 @@ public class MasterApiController {
 		return info;
 
 	}
+	
+	//updateUsrToken sachin 12 Nov 2018
+	@RequestMapping(value = { "/updateUsrToken" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateUsrToken(@RequestParam("userId") int userId, @RequestParam
+			("token") String token) {
 
+		Info info = new Info();
+
+		try {
+			int res = userRepo.updateUsrToken(userId, token);
+
+			if (res == 1) {
+				info.setError(false);
+				info.setMessage(" token updated successfully ");
+			} else {
+				info.setError(true);
+				info.setMessage(" Failed to update token");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			info.setError(true);
+			info.setMessage(" Failed to update token");
+
+		}
+		return info;
+
+	}
 	// ----------------------------------------Work Type-----------------------
 
 	@RequestMapping(value = { "/saveWorkType" }, method = RequestMethod.POST)

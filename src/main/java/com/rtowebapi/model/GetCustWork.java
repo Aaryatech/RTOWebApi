@@ -1,17 +1,15 @@
 package com.rtowebapi.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
 @Entity
-public class GetWork {
-
+public class GetCustWork {
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "work_id")
@@ -111,8 +109,9 @@ public class GetWork {
 	private String custName;
 	private String workTypeName;
 
-	@Transient
-	List<WorkDetail> workDetailList;
+	private String custEmail;
+	
+	private String addPincode;
 
 	public int getWorkId() {
 		return workId;
@@ -386,17 +385,25 @@ public class GetWork {
 		this.workTypeName = workTypeName;
 	}
 
-	public List<WorkDetail> getWorkDetailList() {
-		return workDetailList;
+	public String getCustEmail() {
+		return custEmail;
 	}
 
-	public void setWorkDetailList(List<WorkDetail> workDetailList) {
-		this.workDetailList = workDetailList;
+	public void setCustEmail(String custEmail) {
+		this.custEmail = custEmail;
+	}
+
+	public String getAddPincode() {
+		return addPincode;
+	}
+
+	public void setAddPincode(String addPincode) {
+		this.addPincode = addPincode;
 	}
 
 	@Override
 	public String toString() {
-		return "GetWork [workId=" + workId + ", workTypeTd=" + workTypeTd + ", custId=" + custId + ", vehicalNo="
+		return "GetCustWork [workId=" + workId + ", workTypeTd=" + workTypeTd + ", custId=" + custId + ", vehicalNo="
 				+ vehicalNo + ", vehicalName=" + vehicalName + ", insurance=" + insurance + ", insurance1=" + insurance1
 				+ ", rcbook=" + rcbook + ", rcbook1=" + rcbook1 + ", puc=" + puc + ", puc1=" + puc1
 				+ ", lastUpdateTime=" + lastUpdateTime + ", isUsed=" + isUsed + ", bankDocument=" + bankDocument
@@ -405,22 +412,13 @@ public class GetWork {
 				+ ", photo1=" + photo1 + ", addProof=" + addProof + ", addProof1=" + addProof1 + ", status=" + status
 				+ ", workCost=" + workCost + ", exStr1=" + exStr1 + ", exStr2=" + exStr2 + ", exInt1=" + exInt1
 				+ ", exInt2=" + exInt2 + ", date1=" + date1 + ", date2=" + date2 + ", custMobile=" + custMobile
-				+ ", custName=" + custName + ", workTypeName=" + workTypeName + ", workDetailList=" + workDetailList
-				+ ", getWorkId()=" + getWorkId() + ", getWorkTypeTd()=" + getWorkTypeTd() + ", getCustId()="
-				+ getCustId() + ", getVehicalNo()=" + getVehicalNo() + ", getVehicalName()=" + getVehicalName()
-				+ ", getInsurance()=" + getInsurance() + ", getInsurance1()=" + getInsurance1() + ", getRcbook()="
-				+ getRcbook() + ", getRcbook1()=" + getRcbook1() + ", getPuc()=" + getPuc() + ", getPuc1()=" + getPuc1()
-				+ ", getLastUpdateTime()=" + getLastUpdateTime() + ", getIsUsed()=" + getIsUsed()
-				+ ", getBankDocument()=" + getBankDocument() + ", getBankDocument1()=" + getBankDocument1()
-				+ ", getOrignalLicence()=" + getOrignalLicence() + ", getOrignalLicence1()=" + getOrignalLicence1()
-				+ ", getAdharCard()=" + getAdharCard() + ", getAdharCard1()=" + getAdharCard1() + ", getPhoto()="
-				+ getPhoto() + ", getPhoto1()=" + getPhoto1() + ", getAddProof()=" + getAddProof() + ", getAddProof1()="
-				+ getAddProof1() + ", getStatus()=" + getStatus() + ", getWorkCost()=" + getWorkCost()
-				+ ", getExStr1()=" + getExStr1() + ", getExStr2()=" + getExStr2() + ", getExInt1()=" + getExInt1()
-				+ ", getExInt2()=" + getExInt2() + ", getDate1()=" + getDate1() + ", getDate2()=" + getDate2()
-				+ ", getCustMobile()=" + getCustMobile() + ", getCustName()=" + getCustName() + ", getWorkTypeName()="
-				+ getWorkTypeName() + ", getWorkDetailList()=" + getWorkDetailList() + ", getClass()=" + getClass()
-				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", custName=" + custName + ", workTypeName=" + workTypeName + ", custEmail=" + custEmail
+				+ ", addPincode=" + addPincode + "]";
 	}
+	
+	
+	
+	
+	
 
 }
