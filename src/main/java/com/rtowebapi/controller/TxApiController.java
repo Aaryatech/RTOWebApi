@@ -14,19 +14,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
+import com.rtowebapi.common.Firebase;
 import com.rtowebapi.model.Cust;
 import com.rtowebapi.model.GetCustWork;
 import com.rtowebapi.model.GetWork;
 import com.rtowebapi.model.TaskDesc;
 import com.rtowebapi.model.UpdateStatus;
+import com.rtowebapi.model.User;
 import com.rtowebapi.model.Work;
 import com.rtowebapi.model.WorkDetail;
+import com.rtowebapi.model.WorkType;
+import com.rtowebapi.repo.CustRepo;
 import com.rtowebapi.repo.GetCustWorkRepo;
 import com.rtowebapi.repo.GetWorkRepo;
 import com.rtowebapi.repo.TaskDescRepo;
 import com.rtowebapi.repo.UpdateStatusRepo;
+import com.rtowebapi.repo.UserRepo;
 import com.rtowebapi.repo.WorkDetailRepo;
 import com.rtowebapi.repo.WorkRepo;
+import com.rtowebapi.repo.WorkTypeRepo;
 
 @RestController
 public class TxApiController {
@@ -35,7 +41,16 @@ public class TxApiController {
 	WorkDetailRepo workDetailRepo;
 
 	@Autowired
+	UserRepo userRepo;
+
+	@Autowired
+	WorkTypeRepo workTypeRepo;
+
+	@Autowired
 	WorkRepo workRepo;
+
+	@Autowired
+	CustRepo custRepo;
 
 	@Autowired
 	GetWorkRepo getWorkRepo;
@@ -177,6 +192,7 @@ public class TxApiController {
 		return workHeader;
 
 	}
+
 //Sachin 2 Nov for RTO android Anmol
 	@RequestMapping(value = { "/getCustWorkHeader" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWork> getCustWorkHeader(@RequestParam("custId") int custId) {
@@ -192,25 +208,25 @@ public class TxApiController {
 			}
 
 		} catch (Exception e) {
-			
-			System.err.println("Exce in getCustWorkHeader " +e.getMessage());
+
+			System.err.println("Exce in getCustWorkHeader " + e.getMessage());
 
 			e.printStackTrace();
 
 		}
-		
+
 		return workHeader;
 
 	}
-	
-	//Sachin 12 Nov for RTO android Anmol
-	
+
+	// Sachin 12 Nov for RTO android Anmol
+
 	@Autowired
 	GetCustWorkRepo getCustWorkRepo;
 
-
 	@RequestMapping(value = { "/getCustWorkByUserId" }, method = RequestMethod.POST)
-	public @ResponseBody List<GetCustWork> getCustWorkByCustId(@RequestParam("status") int status,@RequestParam("userId") int userId) {
+	public @ResponseBody List<GetCustWork> getCustWorkByCustId(@RequestParam("status") int status,
+			@RequestParam("userId") int userId) {
 
 		List<GetCustWork> workHeader = new ArrayList<>();
 
@@ -230,10 +246,10 @@ public class TxApiController {
 		return workHeader;
 
 	}
-	
+
 	@RequestMapping(value = { "/getCustWorkByUserIdAndDate" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetCustWork> getCustWorkByUserIdAndDate(@RequestParam("fromDate") String fromDate,
-			@RequestParam("toDate") String toDate,@RequestParam("userId") int userId) {
+			@RequestParam("toDate") String toDate, @RequestParam("userId") int userId) {
 
 		List<GetCustWork> workHeader = new ArrayList<>();
 
@@ -253,8 +269,7 @@ public class TxApiController {
 		return workHeader;
 
 	}
-	
-	
+
 	@RequestMapping(value = { "/deleteWork" }, method = RequestMethod.POST)
 	public @ResponseBody Info deleteWork(@RequestParam("workId") int workId) {
 
@@ -332,6 +347,18 @@ public class TxApiController {
 				res = updateStatusRepo.updateWorkHeaderStatusAndCost(u.getStatus(), u.getWorkId(), u.getWorkCost());
 
 				if (res > 0) {
+					Work work = new Work();
+					work = workRepo.findByWorkId(updateList.get(i).getWorkId());
+
+					Cust cust = new Cust();
+					cust = custRepo.findByCustId(work.getCustId());
+
+					WorkType wType = new WorkType();
+
+					wType = workTypeRepo.findByWorkTypeId(work.getWorkTypeTd());
+
+					Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+							wType.getWorkTypeName() + "\\n Status : Uploads Document : ", 2);
 
 					errorMessage.setError(false);
 					errorMessage.setMessage("success Update Order Header");
@@ -375,11 +402,43 @@ public class TxApiController {
 
 			res = workRepo.updateWorkStatus(status, workIdList);
 
-			if (res > 0) {
+			for (int i = 0; i < workIdList.size(); i++) {
 
-				errorMessage.setError(false);
-				errorMessage.setMessage("success Update Status");
+				if (res > 0) {
 
+					Work work = new Work();
+					work = workRepo.findByWorkId(workIdList.get(i));
+
+					Cust cust = new Cust();
+					cust = custRepo.findByCustId(work.getCustId());
+
+					WorkType wType = new WorkType();
+
+					wType = workTypeRepo.findByWorkTypeId(work.getWorkTypeTd());
+
+					if (work.getStatus() == 4) {
+
+						Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+								wType.getWorkTypeName() + "\nStatus : User Allocated ", 4);
+					} else if (work.getStatus() == 5) {
+
+						Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+								wType.getWorkTypeName() + "\nStatus : Document In Office ", 4);
+					}
+
+					else if (work.getStatus() == 6) {
+
+						Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+								wType.getWorkTypeName() + "\nStatus :Document Submit to RTO ", 4);
+					} else if (work.getStatus() == 7) {
+
+						Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+								wType.getWorkTypeName() + "\nStatus : Handover Document upto Customer ", 4);
+					}
+					errorMessage.setError(false);
+					errorMessage.setMessage("success Update Status");
+
+				}
 			}
 
 		} catch (Exception e) {
@@ -409,22 +468,44 @@ public class TxApiController {
 
 			res = workRepo.updateWorkUsrId(status, workIdList, userId);
 
-			if (res > 0) {
+			for (int i = 0; i < workIdList.size(); i++) {
 
-				errorMessage.setError(false);
-				errorMessage.setMessage("success Update Status");
+				if (res > 0) {
 
-				WorkDetail w = new WorkDetail();
-				w.setDate(date);
+					Work work = new Work();
+					work = workRepo.findByWorkId(workIdList.get(i));
 
-				w.setIsUsed(1);
-				w.setInnerTaskId(status);
-				w.setDateTime(dateTime);
+					Cust cust = new Cust();
+					cust = custRepo.findByCustId(work.getCustId());
 
-				w.setWorkDesc("User Allocation");
+					WorkType wType = new WorkType();
 
-				workRes = workDetailRepo.saveAndFlush(w);
+					wType = workTypeRepo.findByWorkTypeId(work.getWorkTypeTd());
 
+					Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+							wType.getWorkTypeName() + "\nStatus : Update Payment Done ", 3);
+
+					User user = new User();
+					user = userRepo.findByUserId(Integer.parseInt(userId));
+
+					Firebase.sendPushNotification(user.getExStr1(), "Easy RTO", wType.getWorkTypeName()
+							+ "Customer Name : " + cust.getCustName() + " Address : " + cust.getAddPincode(), 3);
+
+					errorMessage.setError(false);
+					errorMessage.setMessage("success Update Status");
+
+					WorkDetail w = new WorkDetail();
+					w.setDate(date);
+
+					w.setIsUsed(1);
+					w.setInnerTaskId(status);
+					w.setDateTime(dateTime);
+
+					w.setWorkDesc("User Allocation");
+
+					workRes = workDetailRepo.saveAndFlush(w);
+
+				}
 			}
 
 		} catch (Exception e) {
@@ -487,6 +568,25 @@ public class TxApiController {
 				res = updateStatusRepo.updateWorkPayment(u.getStatus(), u.getWorkId(), u.getExInt1(), u.getExInt2());
 
 				if (res > 0) {
+
+					System.out.println("Id" + updateList.get(i).getWorkId());
+
+					Work work = new Work();
+					work = workRepo.findByWorkId(updateList.get(i).getWorkId());
+
+					Cust cust = new Cust();
+					cust = custRepo.findByCustId(work.getCustId());
+
+					System.out.println("work" + work.toString());
+
+					WorkType wType = new WorkType();
+
+					wType = workTypeRepo.findByWorkTypeId(work.getWorkTypeTd());
+
+					System.out.println("wType" + wType.toString());
+
+					Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+							wType.getWorkTypeName() + "\n Status : Update Work Cost ", 2);
 
 					errorMessage.setError(false);
 					errorMessage.setMessage("success Update Order Header");
