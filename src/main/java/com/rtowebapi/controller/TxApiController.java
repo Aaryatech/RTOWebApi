@@ -406,6 +406,9 @@ public class TxApiController {
 
 				if (res > 0) {
 
+					errorMessage.setError(false);
+					errorMessage.setMessage("success Update Status");
+
 					Work work = new Work();
 					work = workRepo.findByWorkId(workIdList.get(i));
 
@@ -435,8 +438,6 @@ public class TxApiController {
 						Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
 								wType.getWorkTypeName() + "\nStatus : Handover Document upto Customer ", 4);
 					}
-					errorMessage.setError(false);
-					errorMessage.setMessage("success Update Status");
 
 				}
 			}
@@ -445,7 +446,7 @@ public class TxApiController {
 
 			System.err.println("exc in update order " + e.getMessage());
 			e.printStackTrace();
-			errorMessage.setError(true);
+			errorMessage.setError(false);
 
 		}
 
