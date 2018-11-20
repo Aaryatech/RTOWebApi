@@ -50,7 +50,7 @@ public class MasterApiController {
 		Cust res = new Cust();
 
 		try {
-			
+
 			Cust custCheck = custRepo.findByCustMobileAndIsUsed(cust.getCustMobile(), 1);
 
 			if (custCheck == null) {
@@ -58,21 +58,41 @@ public class MasterApiController {
 				res = custRepo.saveAndFlush(cust);
 				res.setResp("saved");
 			} else {
-			
-					res.setResp("already exist");
-					System.err.println("res" + res);
-					System.err.println("already exist " + cust.getCustMobile());
-				
+
+				res.setResp("already exist");
+				System.err.println("res" + res);
+				System.err.println("already exist " + cust.getCustMobile());
+
 			}
 			if (res.getCustId() < 1 && custCheck == null) {
-				
+
 				System.err.println("res.getCustId() < 1 && custCheck == null");
 				res.setResp("failed to save");
 			}
 
 		} catch (Exception e) {
-			System.err.println("Cust Bean " +res.toString());
+			System.err.println("Cust Bean " + res.toString());
 			res.setResp("failed to save");
+			e.printStackTrace();
+
+		}
+		return res;
+
+	}
+
+	// ----------------------------------------Customer----------------------------------------------------
+
+	@RequestMapping(value = { "/saveCustomer" }, method = RequestMethod.POST)
+	public @ResponseBody Cust saveCustomer(@RequestBody Cust cust) {
+
+		Cust res = new Cust();
+
+		try {
+
+			res = custRepo.saveAndFlush(cust);
+
+		} catch (Exception e) {
+
 			e.printStackTrace();
 
 		}
@@ -405,11 +425,10 @@ public class MasterApiController {
 		return info;
 
 	}
-	
-	//updateUsrToken sachin 12 Nov 2018
+
+	// updateUsrToken sachin 12 Nov 2018
 	@RequestMapping(value = { "/updateUsrToken" }, method = RequestMethod.POST)
-	public @ResponseBody Info updateUsrToken(@RequestParam("userId") int userId, @RequestParam
-			("token") String token) {
+	public @ResponseBody Info updateUsrToken(@RequestParam("userId") int userId, @RequestParam("token") String token) {
 
 		Info info = new Info();
 
