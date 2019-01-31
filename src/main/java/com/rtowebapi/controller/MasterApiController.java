@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rtowebapi.common.DateConvertor;
 import com.rtowebapi.model.Cust;
+import com.rtowebapi.model.GetCount;
 import com.rtowebapi.model.LoginResCust;
 import com.rtowebapi.model.LoginResUser;
 import com.rtowebapi.model.Right;
 import com.rtowebapi.model.User;
 import com.rtowebapi.model.WorkType;
 import com.rtowebapi.repo.CustRepo;
+import com.rtowebapi.repo.GetRTOCount;
 import com.rtowebapi.repo.RightRepo;
 import com.rtowebapi.repo.UserRepo;
 import com.rtowebapi.repo.WorkTypeRepo;
@@ -39,6 +41,9 @@ public class MasterApiController {
 	@Autowired
 	WorkTypeRepo workTypeRepo;
 
+	@Autowired
+	GetRTOCount getRTORepo;
+	
 	@Autowired
 	CustRepo custRepo;
 
@@ -118,6 +123,23 @@ public class MasterApiController {
 
 	}
 
+	@RequestMapping(value = { "/getCountByStatus" }, method = RequestMethod.GET)
+	public @ResponseBody GetCount getCustByCustId() {
+
+		GetCount count = new GetCount();
+
+		try {
+			count = getRTORepo.getDashboardCount();
+		
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return count;
+
+	}
+	
 	@RequestMapping(value = { "/getAllCustList" }, method = RequestMethod.GET)
 	public @ResponseBody List<Cust> getAllCustList() {
 

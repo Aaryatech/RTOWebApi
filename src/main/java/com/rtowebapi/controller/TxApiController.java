@@ -170,7 +170,37 @@ public class TxApiController {
 		return workHeader;
 
 	}
+	
+	
+	
+	
+	@RequestMapping(value = { "/getWorkHeaderByIsUsed" }, method = RequestMethod.GET)
+	public @ResponseBody List<GetWork> getWorkHeaderByIsUsed() {
 
+		List<GetWork> workHeader = new ArrayList<>();
+
+		try {
+
+			workHeader = getWorkRepo.findByIsUsed(1);
+			for (int i = 0; i < workHeader.size(); i++) {
+				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
+				//System.out.println(workHeader.get(35));
+			}
+
+
+		} catch (Exception e) {
+
+			System.err.println("Exce in getCustWorkHeader " + e.getMessage());
+
+			e.printStackTrace();
+
+		}
+
+		return workHeader;
+
+	}
+
+	
 	@RequestMapping(value = { "/getWorkHeaderByStatus" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWork> getWorkHeaderByStatus(@RequestParam("status") int status) {
 
@@ -181,9 +211,10 @@ public class TxApiController {
 			workHeader = getWorkRepo.getWorkByStatus(status);
 			for (int i = 0; i < workHeader.size(); i++) {
 				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
-
+				//System.out.println(workHeader.get(35));
 			}
 
+		
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -192,7 +223,31 @@ public class TxApiController {
 		return workHeader;
 
 	}
+	
 
+	
+	@RequestMapping(value = { "/getWorkHeaderList" }, method = RequestMethod.GET)
+	public @ResponseBody List<GetWork> getWorkHeaderListDetail() {
+
+		List<GetWork> workHeader = new ArrayList<>();
+
+		try {
+
+			workHeader = getWorkRepo.findByIsUsed(1);
+			for (int i = 0; i < workHeader.size(); i++) {
+				workHeader.get(i).setDate1(DateConvertor.convertToDMY(workHeader.get(i).getDate1()));
+				//System.out.println(workHeader.get(35));
+			}
+
+		
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+		return workHeader;
+
+	}
 //Sachin 2 Nov for RTO android Anmol
 	@RequestMapping(value = { "/getCustWorkHeader" }, method = RequestMethod.POST)
 	public @ResponseBody List<GetWork> getCustWorkHeader(@RequestParam("custId") int custId) {

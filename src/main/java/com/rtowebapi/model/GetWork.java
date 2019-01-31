@@ -110,9 +110,12 @@ public class GetWork {
 	private String custMobile;
 	private String custName;
 	private String workTypeName;
-
+	
 	@Transient
 	List<WorkDetail> workDetailList;
+	
+	
+
 
 	public int getWorkId() {
 		return workId;
@@ -406,21 +409,8 @@ public class GetWork {
 				+ ", workCost=" + workCost + ", exStr1=" + exStr1 + ", exStr2=" + exStr2 + ", exInt1=" + exInt1
 				+ ", exInt2=" + exInt2 + ", date1=" + date1 + ", date2=" + date2 + ", custMobile=" + custMobile
 				+ ", custName=" + custName + ", workTypeName=" + workTypeName + ", workDetailList=" + workDetailList
-				+ ", getWorkId()=" + getWorkId() + ", getWorkTypeTd()=" + getWorkTypeTd() + ", getCustId()="
-				+ getCustId() + ", getVehicalNo()=" + getVehicalNo() + ", getVehicalName()=" + getVehicalName()
-				+ ", getInsurance()=" + getInsurance() + ", getInsurance1()=" + getInsurance1() + ", getRcbook()="
-				+ getRcbook() + ", getRcbook1()=" + getRcbook1() + ", getPuc()=" + getPuc() + ", getPuc1()=" + getPuc1()
-				+ ", getLastUpdateTime()=" + getLastUpdateTime() + ", getIsUsed()=" + getIsUsed()
-				+ ", getBankDocument()=" + getBankDocument() + ", getBankDocument1()=" + getBankDocument1()
-				+ ", getOrignalLicence()=" + getOrignalLicence() + ", getOrignalLicence1()=" + getOrignalLicence1()
-				+ ", getAdharCard()=" + getAdharCard() + ", getAdharCard1()=" + getAdharCard1() + ", getPhoto()="
-				+ getPhoto() + ", getPhoto1()=" + getPhoto1() + ", getAddProof()=" + getAddProof() + ", getAddProof1()="
-				+ getAddProof1() + ", getStatus()=" + getStatus() + ", getWorkCost()=" + getWorkCost()
-				+ ", getExStr1()=" + getExStr1() + ", getExStr2()=" + getExStr2() + ", getExInt1()=" + getExInt1()
-				+ ", getExInt2()=" + getExInt2() + ", getDate1()=" + getDate1() + ", getDate2()=" + getDate2()
-				+ ", getCustMobile()=" + getCustMobile() + ", getCustName()=" + getCustName() + ", getWorkTypeName()="
-				+ getWorkTypeName() + ", getWorkDetailList()=" + getWorkDetailList() + ", getClass()=" + getClass()
-				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ "]";
 	}
 
+	
 }
