@@ -23,7 +23,8 @@ public class ImageUploadController {
 	//private static String DOC_URL = "/opt/tomcat-latest/webapps/uploads/SUGGESTION/";
 	
 	//private static String DOC_URL="/home/lenovo/Documents/RtoUpload/";
-	private static String DOC_URL=	"/home/aaryate1/tomcat.aaryatechindia.in/tomcat-8.0.18/webapps/rtodocupload/";
+	//private static String DOC_URL=	"/home/aaryate1/tomcat.aaryatechindia.in/tomcat-8.0.18/webapps/rtodocupload/";
+	private static String DOC_URL=	"/home/tomcataaryatechi/tomcat.aaryatechindia.in/tomcat-8.0.18/webapps/rtodocupload/";
 	
 	//private static String BILL_FOLDER ="/home/maxadmin/Desktop/photos/";
 	
