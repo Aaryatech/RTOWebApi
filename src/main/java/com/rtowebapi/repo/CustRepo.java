@@ -29,6 +29,8 @@ public interface CustRepo extends JpaRepository<Cust, Integer> {
 
 	Cust findByCustMobileAndIsUsed(String custMobile, int i);
 	
+	@Query(value="SELECT * FROM `m_cust` WHERE cust_mobile=:custMobile AND cust_id!=:custId AND is_used=:del", nativeQuery=true)
+	Cust findByCustMobileAndIsUsed(@Param("custMobile") String custMobile, @Param("custId") int custId, @Param("del") int del);
 	
 	//Sachin 2 Nov
 	@Transactional

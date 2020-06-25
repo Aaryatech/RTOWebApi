@@ -53,11 +53,13 @@ public class MasterApiController {
 	public @ResponseBody Cust saveCust(@RequestBody Cust cust) {
 
 		Cust res = new Cust();
-
+		Cust custCheck = new Cust();
 		try {
-
-			Cust custCheck = custRepo.findByCustMobileAndIsUsed(cust.getCustMobile(), 1);
-
+				if(cust.getCustId()==0) {
+					custCheck = custRepo.findByCustMobileAndIsUsed(cust.getCustMobile(), 1);
+				}else {
+					custCheck = custRepo.findByCustMobileAndIsUsed(cust.getCustMobile(), cust.getCustId(), 1);
+				}
 			if (custCheck == null) {
 
 				res = custRepo.saveAndFlush(cust);
