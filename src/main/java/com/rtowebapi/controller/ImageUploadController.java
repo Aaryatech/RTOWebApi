@@ -15,9 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class ImageUploadController {
 
-	private static String DOC_URL="C:/Users/MAXADMIN/Desktop/SecurityApp Files";
+	//private static String DOC_URL="C:/Users/MAXADMIN/Desktop/SecurityApp Files";
 	
-	//private static String DOC_URL = "/home/tomcataaryatechi/tomcat.aaryatechindia.in/tomcat-8.0.18/webapps/rtodocupload/";
+	private static String DOC_URL = "/opt/apache-tomcat-8.5.49/webapps/rto_uploads/rtodocupload/";
 
 	@PostMapping("/photoUpload")
 	public @ResponseBody Info getFarmerContract(@RequestParam("file") MultipartFile[] uploadfile,
