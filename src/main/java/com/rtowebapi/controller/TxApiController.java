@@ -675,5 +675,81 @@ public class TxApiController {
 
 		return errorMessage;
 	}
+	
+	
+	@RequestMapping(value = { "/updateWorkPendingAmt" }, method = RequestMethod.POST)
+	public @ResponseBody Info updateWorkPendingAmt(@RequestBody List<UpdateStatus> updateList) {
+
+		Info errorMessage = new Info();
+		Date now = new Date();
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String date = sdf1.format(now.getTime());
+		String dateTime = sdf.format(now.getTime());
+
+		System.out.println("updateList" + updateList.toString());
+		int res;
+		WorkDetail workRes = new WorkDetail();
+
+		try {
+			for (int i = 0; i < updateList.size(); i++) {
+				System.out.println("size" + updateList.size());
+
+				UpdateStatus u = updateList.get(i);
+
+				res = updateStatusRepo.updateWorkPayment(u.getStatus(), u.getWorkId(), u.getExInt1(), u.getExInt2());
+
+				if (res > 0) {
+
+					System.out.println("Id" + updateList.get(i).getWorkId());
+
+					Work work = new Work();
+					work = workRepo.findByWorkId(updateList.get(i).getWorkId());
+
+					Cust cust = new Cust();
+					cust = custRepo.findByCustId(work.getCustId());
+
+					System.out.println("work" + work.toString());
+
+					WorkType wType = new WorkType();
+
+					wType = workTypeRepo.findByWorkTypeId(work.getWorkTypeTd());
+
+					System.out.println("wType" + wType.toString());
+
+					Firebase.sendPushNotification(cust.getExStr1(), "Easy RTO",
+							wType.getWorkTypeName() + "\n Status : Update Work Cost ", 2);
+
+					errorMessage.setError(false);
+					errorMessage.setMessage("success Update Order Header");
+
+					WorkDetail w = new WorkDetail();
+					w.setDate(date);
+					w.setExInt1(u.getExInt1());
+					w.setExInt2(u.getExInt2());
+					w.setIsUsed(1);
+					w.setInnerTaskId(u.getStatus());
+					w.setDateTime(dateTime);
+					w.setWorkId(u.getWorkId());
+					w.setWorkDesc("User Allocation");
+
+					workRes = workDetailRepo.saveAndFlush(w);
+
+					System.out.println("workRes" + workRes.toString());
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			System.err.println("exc in update order " + e.getMessage());
+			e.printStackTrace();
+			errorMessage.setError(true);
+
+		}
+
+		return errorMessage;
+	}
 
 }
